@@ -55,7 +55,6 @@ const logoutController = (req, res) => {
 const checkAuthStatus = async (req, res) => {
   try {
     const token = req.cookies.auth_token;
-    console.log("token: ", token);
 
     if (!token) {
       return res.status(200).json({ isAuthenticated: false });

@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 
 const refererSchema = new mongoose.Schema({
   company: { type: String, required: true },
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
+  name: { type: String, required: true },
   numReferrals: { type: Number, required: true },
   role: { type: String, required: true },
   email: { type: String, required: true },

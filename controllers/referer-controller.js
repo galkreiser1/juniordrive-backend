@@ -26,29 +26,10 @@ const createReferer = async (req, res, next) => {
     return next(new HttpError(error.details[0].message, 400));
   }
 
-  const {
-    firstName,
-    lastName,
-    numReferrals,
-    role,
-    linkedin,
-    email,
-    availability,
-  } = req.body;
+  const { name, numReferrals, role, linkedin, email, availability } = req.body;
 
   let { company } = req.body;
   company = company.toLowerCase();
-
-  const newReferer = new Referer({
-    company,
-    firstName,
-    lastName,
-    role,
-    email,
-    linkedin: linkedin || "",
-    numReferrals: 0,
-    availability: "Available",
-  });
 
   try {
     let existingCompany = await Company.findOne({ name: company });
@@ -56,18 +37,65 @@ const createReferer = async (req, res, next) => {
       const newCompany = new Company({ name: company });
       await newCompany.save();
     }
+    let existingReferer = await Referer.findOne({ email });
 
-    await newReferer.save();
-    res.status(201).json({ referer: newReferer });
+    if (existingReferer) {
+      existingReferer.name = name;
+      existingReferer.role = role;
+      existingReferer.linkedin = linkedin || "";
+      existingReferer.company = company;
+      existingReferer.availability = availability || "Available";
+
+      await existingReferer.save();
+      res.status(200).json({ referer: existingReferer });
+    } else {
+      // Create a new referer
+      const newReferer = new Referer({
+        company,
+        name,
+        role,
+        email,
+        linkedin: linkedin || "",
+        numReferrals: 0,
+        availability: "Available",
+      });
+
+      await newReferer.save();
+      res.status(201).json({ referer: newReferer });
+    }
   } catch (e) {
+    console.log("Fail", e);
     return next(
-      new HttpError("Error creating new referer, please try again", 500)
+      new HttpError("Error creating or updating referer, please try again", 500)
     );
   }
 };
 
+const deleteReferer = async (req, res, next) => {
+  const email = req.params.email;
+
+  try {
+    const referer = await Referer.findOneAndDelete({ email });
+    if (!referer) {
+      return next(new HttpError("Referer not found", 404));
+    }
+    res.status(200).json({ message: "Referer deleted successfully" });
+  } catch (e) {
+    return next(new HttpError("Error deleting referer, please try again", 500));
+  }
+};
+
+const getReferer = async (req, res, next) => {
+  const email = req.params.email;
+
+  try {
+    const referer = await Referer.findOne({ email });
+  } catch (e) {}
+};
+
 exports.getReferers = getReferers;
 exports.createReferer = createReferer;
+exports.deleteReferer = deleteReferer;
 
 //const data = [
 //   {
