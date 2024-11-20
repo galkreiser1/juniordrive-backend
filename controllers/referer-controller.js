@@ -90,12 +90,20 @@ const getReferer = async (req, res, next) => {
 
   try {
     const referer = await Referer.findOne({ email });
-  } catch (e) {}
+    if (!referer) {
+      res.status(200).json({ referer: null });
+    } else {
+      res.status(200).json({ referer });
+    }
+  } catch (e) {
+    return next(new HttpError("Error getting referer, please try again", 500));
+  }
 };
 
 exports.getReferers = getReferers;
 exports.createReferer = createReferer;
 exports.deleteReferer = deleteReferer;
+exports.getReferer = getReferer;
 
 //const data = [
 //   {
