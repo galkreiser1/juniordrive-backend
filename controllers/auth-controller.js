@@ -42,10 +42,9 @@ const loginController = async (req, res, next) => {
 };
 
 const logoutController = (req, res) => {
-  res.cookie("auth_token", "", {
+  res.clearCookie("auth_token", "", {
     httpOnly: true,
     secure: isProduction,
-    maxAge: 0,
     sameSite: isProduction ? "none" : "lax",
     path: "/",
   });

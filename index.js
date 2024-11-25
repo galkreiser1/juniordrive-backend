@@ -14,10 +14,10 @@ const app = express();
 
 // Enable CORS with credentials
 const corsOptions = {
-  origin: "http://localhost:5173", // Update this with your frontend URL
+  origin: "http://localhost:5173",
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Accept", "Cookie"],
 };
 
 app.use(cors(corsOptions));
