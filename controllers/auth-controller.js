@@ -1,9 +1,12 @@
 const HttpError = require("../models/http-error");
 const { OAuth2Client } = require("google-auth-library");
+const jwt = require("jsonwebtoken");
 
 const clientID =
   "1021369967990-lqngfoqb1eooonp28sl65m4sre8dcsf8.apps.googleusercontent.com";
 const client = new OAuth2Client(clientID);
+
+const JWT_SECRET = "your-secret-key";
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -18,11 +21,20 @@ const loginController = async (req, res, next) => {
 
     const payload = ticket.getPayload();
 
-    // Set cookie with proper options
-    res.cookie("auth_token", token, {
+    const sessionToken = jwt.sign(
+      {
+        email: payload.email,
+        name: payload.name,
+        picture: payload.picture,
+      },
+      JWT_SECRET,
+      { expiresIn: "24h" }
+    );
+
+    res.cookie("auth_token", sessionToken, {
       httpOnly: true,
       secure: isProduction,
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      maxAge: 24 * 60 * 60 * 1000,
       sameSite: isProduction ? "none" : "lax",
       path: "/",
     });
@@ -59,20 +71,14 @@ const checkAuthStatus = async (req, res) => {
       return res.status(200).json({ isAuthenticated: false });
     }
 
-    // Verify the token
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: clientID,
-    });
-
-    const payload = ticket.getPayload();
+    const decoded = jwt.verify(token, JWT_SECRET);
 
     res.status(200).json({
       isAuthenticated: true,
       user: {
-        email: payload.email,
-        name: payload.name,
-        picture: payload.picture,
+        email: decoded.email,
+        name: decoded.name,
+        picture: decoded.picture,
       },
     });
   } catch (error) {
