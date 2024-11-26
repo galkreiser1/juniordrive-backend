@@ -5,6 +5,7 @@ const express = require("express");
 const refererRouter = require("./routes/referer-routes");
 const companyRouter = require("./routes/company-routes");
 const authRouter = require("./routes/auth-routes");
+const resourceRouter = require("./routes/resource-routes");
 
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -28,6 +29,7 @@ app.use(cookieParser());
 app.use("/api/referers", refererRouter);
 app.use("/api/company", companyRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/resources", resourceRouter);
 
 app.use((req, res, next) => {
   next(new HttpError("Could not find route", 404));
