@@ -38,5 +38,32 @@ const createResource = async (req, res, next) => {
   }
 };
 
+// New function to handle file uploads
+const createResourceWithFile = async (req, res, next) => {
+  try {
+    // req.file is available because of multer
+    if (!req.file) {
+      return next(new HttpError("No file uploaded", 400));
+    }
+
+    const { name, type, description } = req.body;
+
+    const newResource = new Resource({
+      name,
+      type,
+      description: description || "",
+      fileUrl: req.file.location, // S3 url of the uploaded file
+      fileName: req.file.originalname,
+    });
+
+    await newResource.save();
+    res.status(201).json({ resource: newResource });
+  } catch (e) {
+    console.error("File upload error:", e);
+    return next(new HttpError("Error creating resource with file", 500));
+  }
+};
+
 exports.getResources = getResources;
 exports.createResource = createResource;
+exports.createResourceWithFile = createResourceWithFile;
