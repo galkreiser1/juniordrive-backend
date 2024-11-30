@@ -2,11 +2,10 @@ const HttpError = require("../models/http-error");
 const { OAuth2Client } = require("google-auth-library");
 const jwt = require("jsonwebtoken");
 
-const clientID =
-  "1021369967990-lqngfoqb1eooonp28sl65m4sre8dcsf8.apps.googleusercontent.com";
+const clientID = process.env.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(clientID);
 
-const JWT_SECRET = "your-secret-key";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const isProduction = process.env.NODE_ENV === "production";
 
