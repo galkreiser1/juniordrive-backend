@@ -1,3 +1,4 @@
+require("dotenv").config();
 const HttpError = require("./models/http-error");
 
 const express = require("express");
@@ -13,9 +14,8 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const app = express();
 
-// Enable CORS with credentials
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: process.env.CLIENT_URL,
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Accept", "Cookie"],
@@ -43,16 +43,17 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "An Unknown error occurred!" });
 });
 
+const PORT = process.env.PORT || 5000;
+
 mongoose
-  .connect(
-    "mongodb+srv://gal:uoJQAh0lN6M2JLFv@cluster0.3dd5l.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-  )
+  .connect(process.env.MONGODB_URI)
   .then(() => {
-    console.log("Starting Server...");
     console.log("Successfully connected to DB!");
-    console.log("Listening on port 5000...");
-    app.listen(5000);
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
   })
   .catch((err) => {
-    console.log("Error connecting to DB", err.message);
+    console.log("Error connecting to DB:", err.message);
+    process.exit(1);
   });
