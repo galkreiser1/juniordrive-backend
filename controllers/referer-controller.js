@@ -104,39 +104,3 @@ exports.getReferers = getReferers;
 exports.createReferer = createReferer;
 exports.deleteReferer = deleteReferer;
 exports.getReferer = getReferer;
-
-//const data = [
-//   {
-//     company: "Google",
-//     name: "Jane Doe",
-//     numReferrals: 10,
-//     role: "Software Engineer",
-//     contacts: [
-//       { type: "LinkedIn", url: "https://linkedin.com/in/jane" },
-//       { type: "Email", url: "mailto:jane.doe@gmail.com" },
-//     ],
-//     location: "Tel Aviv, Israel",
-//     availability: "Available",
-//   },
-//   {
-//     company: "Microsoft",
-//     name: "John Smith",
-//     numReferrals: 10,
-//     role: "Senior Developer",
-//     contacts: [{ type: "Email", url: "mailto:john.smith@microsoft.com" }],
-//     location: "New York, USA",
-//     availability: "Unavailable",
-//   },
-//   {
-//     company: "Microsoft",
-//     name: "Mark Brown",
-//     numReferrals: 10,
-//     role: "Cloud Architect",
-//     contacts: [
-//       { type: "LinkedIn", url: "https://linkedin.com/in/mark" },
-//       { type: "Email", url: "mailto:mark.brown@amazon.com" },
-//     ],
-//     location: "Seattle, USA",
-//     availability: "Available",
-//   },
-// ];

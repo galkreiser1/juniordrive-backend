@@ -32,31 +32,24 @@ const createCompany = async (req, res, next) => {
 };
 
 const getCompanies = async (req, res, next) => {
-  // Get search query from URL parameters
-  // example URL: /api/company?search=apple
   const searchQuery = req.query.search || "";
 
   // Add pagination parameters
-  // example URL: /api/company?search=apple&page=1&limit=20
-  const page = parseInt(req.query.page) || 1; // If no page specified, default to 1
-  const limit = parseInt(req.query.limit) || 20; // Show 20 items per page by default
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 20;
 
   try {
     let query = {};
 
     // Only add search condition if there's a search query
     if (searchQuery) {
-      // $regex is MongoDB's way of using regular expressions
-      // '^' means "starts with"
-      // 'i' means case insensitive
       query.name = { $regex: `^${searchQuery}`, $options: "i" };
     }
 
     const companies = await Company.find(query)
-      .limit(limit) // Limit how many documents to return
-      .skip((page - 1) * limit); // Skip previous pages
+      .limit(limit)
+      .skip((page - 1) * limit);
 
-    // Also get total count for pagination
     const total = await Company.countDocuments(query);
 
     res.status(200).json({
