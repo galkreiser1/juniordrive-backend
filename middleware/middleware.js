@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const HttpError = require("../models/http-error");
 
 const authMiddleware = (req, res, next) => {
-  console.log("Hitting middleware, token:", req.cookies.auth_token);
   try {
     const token = req.cookies.auth_token;
 
