@@ -2,13 +2,15 @@ const express = require("express");
 const router = express.Router();
 const resourceController = require("../controllers/resource-controller");
 const upload = require("../config/s3Config");
+const authMiddleware = require("../middleware/middleware");
 
 // Regular resources (no file)
-router.post("/", resourceController.createResource);
+router.post("/", authMiddleware, resourceController.createResource);
 
 // Resources with file upload
 router.post(
   "/with-file",
+  authMiddleware,
   upload.single("file"), // 'file' matches the field name from your form
   resourceController.createResourceWithFile
 );
