@@ -53,18 +53,15 @@ const loginController = async (req, res, next) => {
 };
 
 const logoutController = (req, res) => {
-  console.log("Before clearing - Cookies:", req.cookies); // Add this to see existing cookies
-
   res.clearCookie("auth_token", {
     httpOnly: true,
     secure: true,
     sameSite: "none",
     path: "/",
-    expires: new Date(0), // Add explicit expiration
-    domain: undefined, // Let it use the current domain
+    expires: new Date(0),
+    domain: undefined,
   });
 
-  console.log("After clearing - Response headers:", res.getHeaders());
   res.status(200).json({ message: "Logged out successfully" });
 };
 
