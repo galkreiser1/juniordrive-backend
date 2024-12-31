@@ -53,21 +53,18 @@ const loginController = async (req, res, next) => {
 };
 
 const logoutController = (req, res) => {
-  res.clearCookie("auth_token", "", {
+  console.log("Before clearing - Cookies:", req.cookies); // Add this to see existing cookies
+
+  res.clearCookie("auth_token", {
     httpOnly: true,
-    secure: isProduction,
-    sameSite: isProduction ? "none" : "lax",
+    secure: true,
+    sameSite: "none",
     path: "/",
+    expires: new Date(0), // Add explicit expiration
+    domain: undefined, // Let it use the current domain
   });
 
-  console.log({
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: isProduction ? "none" : "lax",
-    path: "/",
-  });
-
-  res.clearCookie("auth_token");
+  console.log("After clearing - Response headers:", res.getHeaders());
   res.status(200).json({ message: "Logged out successfully" });
 };
 
