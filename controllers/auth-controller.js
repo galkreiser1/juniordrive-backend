@@ -59,6 +59,15 @@ const logoutController = (req, res) => {
     sameSite: isProduction ? "none" : "lax",
     path: "/",
   });
+
+  console.log({
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+    path: "/",
+  });
+
+  res.clearCookie("auth_token");
   res.status(200).json({ message: "Logged out successfully" });
 };
 
