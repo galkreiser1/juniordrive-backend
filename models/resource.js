@@ -14,6 +14,9 @@ const resourceSchema = new mongoose.Schema({
   // For GUIDE with file
   fileUrl: { type: String, required: false },
   fileName: { type: String, required: false },
+  isApproved: { type: Boolean, default: false },
+  createdBy: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("Resource", resourceSchema);
