@@ -8,6 +8,8 @@ const companyRouter = require("./routes/company-routes");
 const authRouter = require("./routes/auth-routes");
 const resourceRouter = require("./routes/resource-routes");
 
+const { apiLimiter } = require("./middleware/middleware");
+
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
@@ -25,6 +27,7 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(cookieParser());
+app.use("/api/", apiLimiter);
 
 app.use("/api/referers", refererRouter);
 app.use("/api/company", companyRouter);
